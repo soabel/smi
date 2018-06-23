@@ -16,3 +16,6 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('/status', 'MapasController@test')->name('getStatus');
+Route::get('/mapas/distritos', 'MapasController@getDistritos')->name('getMapasDistritos');

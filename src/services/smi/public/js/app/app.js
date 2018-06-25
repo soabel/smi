@@ -6,6 +6,7 @@ const API_SECCIONES_LINEAS= API + "seccionLineal";
 const API_SECCIONES_POLIGONOS = API + "seccionPoligono";
 
 const API_AUTHENTICATE = API + "autenticar";
+const API_VALIDAR_ACCESO = "http://localhost:8000/api/validateLogin";
 const KEY_AUTHENTICATED_USER = "auth";
 
 const URL_HOME = "main";

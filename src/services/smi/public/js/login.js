@@ -36,6 +36,32 @@ function authenticateObject(){
     };
 }
 
+function validarAcceso() {
+    //window.location.replace('/login');
+
+    $.ajax({
+        url: API_VALIDAR_ACCESO,
+        type: 'POST',
+        data: {},
+        dataType: 'json',
+        success: function ($response) {
+            if (typeof ($response !== 'undefined') && $response !== null) {
+                console.log($response);
+                if ($response.status) { 
+                    if($response.showLogin){
+                        window.location.replace('/login');
+                    }else{
+                        window.location.replace('/main');
+                    }
+                    
+                }
+            }
+        },
+        error: function (xhr, status) {},
+        complete: function (xhr, status) {}
+    });
+}
+
 function login($authData, $afterLogin) {
     $.ajax({
         url: API_AUTHENTICATE,

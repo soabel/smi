@@ -28,5 +28,8 @@ Route::get('/', function () {
     return view('login/login');
 });
 
+Route::get('/auth/validate', function () {
+    return view('validarAcceso');
+});
 
 

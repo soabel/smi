@@ -39,6 +39,10 @@ function authenticateObject(){
 function validarAcceso() {
     //window.location.replace('/login');
 
+    console.log('aqui');
+
+    const $mensaje = $("#lblMensaje");
+
     $.ajax({
         url: API_VALIDAR_ACCESO,
         type: 'POST',
@@ -46,7 +50,7 @@ function validarAcceso() {
         dataType: 'json',
         success: function ($response) {
             if (typeof ($response !== 'undefined') && $response !== null) {
-                console.log($response);
+                $mensaje.val('');
                 if ($response.status) { 
                     if($response.showLogin){
                         window.location.replace('/login');
@@ -54,6 +58,10 @@ function validarAcceso() {
                         window.location.replace('/main');
                     }
                     
+                }else{
+                    console.log($mensaje);
+                    console.log($response);
+                    $mensaje.val(response.error);
                 }
             }
         },
@@ -63,6 +71,10 @@ function validarAcceso() {
 }
 
 function login($authData, $afterLogin) {
+    console.log('aqui');
+
+    const $mensaje = $("#lblMensaje");
+
     $.ajax({
         url: API_AUTHENTICATE,
         type: 'POST',
@@ -70,9 +82,15 @@ function login($authData, $afterLogin) {
         dataType: 'json',
         success: function ($response) {
             if (typeof ($response !== 'undefined') && $response !== null) {
+                $mensaje.val('');
                 if ($response.status) {                    
                     $afterLogin($response.data);
                     console.log('autenticado');
+                }
+                else{
+                    console.log($mensaje);
+                    console.log($response);
+                    $mensaje.text($response.error);
                 }
             }
         },

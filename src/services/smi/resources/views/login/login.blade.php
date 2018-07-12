@@ -89,6 +89,9 @@
                 <label for="password">Contraseña</label>
             </div>
             <button id="btnLogin" class="rounded-75 btn btn-lg btn-primary btn-block" type="button">Iniciar Sesion</button>
+            <div class="custom-control p-2" style="color:red;">
+                <label id="lblMensaje"></label>
+            </div>
 
             <div class="custom-control custom-checkbox my-3">
                 <input type="checkbox" class="custom-control-input" id="customControlAutosizing" value="remember-me">

@@ -63,7 +63,8 @@ function settings() {
     }
 }
 
-function initMap($regiones, $afterMapIsLoaded) {    
+function initMap($regiones, $afterMapIsLoaded) {  
+    console.log('load map'); 
     if(typeof $regiones === 'undefined' || $regiones === null)
         return;    
     map = L.map('map-container');
@@ -137,7 +138,8 @@ function loadRegiones($afterLoadRegiones){
         dataType : 'json',
         success : function($response) {
             if(typeof ($response !== 'undefined') && $response !== null){
-                if($response.status){
+                console.log ($response);
+                if($response.status){                    
                     const $onceMapIsLoaded = onceMapIsLoaded;                    
                     $afterLoadRegiones($response.data, $onceMapIsLoaded);
                 }
@@ -357,7 +359,6 @@ function loadSecciones($afterLoadSecciones){
             if(typeof ($response !== 'undefined') && $response !== null){
                 if($response.status){
                     buildSecciones($response.data, $afterLoadSecciones);
-                    console.log($response.data)
                 }
             }            
         },     
@@ -374,17 +375,16 @@ function buildSecciones($secciones, $afterBuildSecciones){
     if(typeof _ == 'undefined')
         throw Exception("No lodash object found");
     $secciones = _.groupBy($secciones, function($item){
-        return $item.idSeccionPadre;
+        let key=$item.idSeccionPadre;
+        if($item.idSeccionPadre == null)
+            key='0';
+        return key;
     });
 
-    console.log($secciones);
-    
     $cabecera = _.find($secciones, function($item, $key){
-        if($key === '' || $key == null)
+        if($key === '' || $key == null || $key === '0') 
             return $item;
     });
-
-    console.log($cabecera);
 
     $cabecera = _.map($cabecera, function($item, $key){
         $children = _.filter($secciones, function($children, $subKey){

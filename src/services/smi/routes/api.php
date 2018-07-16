@@ -17,9 +17,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group(['middleware' => 'cors'], function() {
-    Route::get('/mapas/distritos','MapasController@getDistritos' ); 
- });
+// Route::group(['middleware' => 'cors'], function() {
+//     Route::get('/mapas/distritos','MapasController@getDistritos' ); 
+//  });
 
 Route::group(['middleware' => 'cors'], function() {
     Route::post('/validateLogin','AuthController@validarAcceso' ); 
@@ -30,8 +30,10 @@ Route::group(['middleware' => 'cors'], function() {
     Route::get('/secciones','SeccionesController@get');
     Route::get('/secciones/{id}','SeccionesController@getById');
     Route::get('/secciones/{id}/detalle/','SeccionesController@getSeccionDetalleByIdSeccion');
-    Route::get('/secciones/{id}/atributos/','SeccionesController@getSeccionAtributoByIdSeccion');
+    Route::get('/secciones/{id}/atributos/','SeccionesController@getSeccionAtributoByIdSeccion');   
     Route::post('/secciones','SeccionesController@save');
+
+    Route::get('/mapas/distritos','MapasController@getDistritos' );
  });
 
 Route::get('/status', 'MapasController@test')->name('getStatus');

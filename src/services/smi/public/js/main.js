@@ -349,7 +349,7 @@ function loadPoligonos($afterLoadPoligonos){
 }
 
 function loadSecciones($afterLoadSecciones){
-    const $urlSecciones= API_PROD + 'secciones'
+    const $urlSecciones= API_SECCIONES;
 
     $.ajax({
         url : API_SECCIONES,

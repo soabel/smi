@@ -158,19 +158,21 @@ function onceMapIsLoaded(){
     const $whenMenuItemIsChecked = function(){
         console.log("checked");
         const $isChecked = $(this).prop('checked');
-        const $data = $(this).data('value');
-        const $parent = $(this).data('parent');        
-        const $afterLoadPuntos = function($puntos){
-            const $id = $puntos.id;
-            const $geoDatos = $puntos.geoDatos;
-            var $points = ($geoDatos !== null && $geoDatos.length > 0) ? $geoDatos[0]: false;
-            if($points){
-                const $onEachFeature = function(feature, layer) {        
+        const $seccion = $(this).data('value');
+        const $parent = $(this).data('parent');   
+        
+        const $afterLoadPuntos = function($seccion){
+            console.log($seccion);
+            const $id = $seccion.id;
+           
+            if($seccion.geoJsonFile){
+                const $onEachFeature = function(feature, layer) {
+                    console.log(feature);
                     var popupContent = "<p>I started out as a GeoJSON " +
                             feature.geometry.type + ", but now I'm a Leaflet vector!</p>";
                     if (feature.properties) {
                         $template = renderHandlebarsTemplate(
-                            "#punto-popupcontent-template", null, { properties: {descripcion: "A description"} }, null, true
+                            "#punto-popupcontent-template", null, { properties: {descripcion: feature.properties.OR_} }, null, true
                         );
                         popupContent = $template;
                     }
@@ -182,8 +184,9 @@ function onceMapIsLoaded(){
                     html: '<div><i class="fas 3x fa-map-marker-alt"></i></div>',
                     iconSize: [128, 128]
                 });
-
-                $points = $points.dataJson;
+                
+                let $points =JSON.parse( $seccion.geoJsonFile);
+                
                 L.geoJSON($points, {
                     onEachFeature: $onEachFeature,
                     pointToLayer: function (feature, latlng) {
@@ -284,19 +287,20 @@ function onceMapIsLoaded(){
             }            
         };
 
-        loadPuntos($afterLoadPuntos);
+        loadSeccion($afterLoadPuntos, $seccion);
         // loadPoligonos($afterLoadPoligonos);
         // loadLineas($afterLoadLines);
     };
     $items.on("change", $whenMenuItemIsChecked);    
 }
 
-function loadPuntos($afterLoadPuntos){
+function loadSeccion($afterLoadPuntos, $seccion){
     $.ajax({
-        url : API_SECCIONES_PUNTOS,        
+        url : API_SECCIONES + '/' + $seccion.id,        
         type : 'GET',
         dataType : 'json',
         success : function($response) {
+            console.log($response);
             if(typeof ($response !== 'undefined') && $response !== null){
                 if($response.status){                    
                     $afterLoadPuntos($response.data);                    

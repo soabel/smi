@@ -138,7 +138,6 @@ function loadRegiones($afterLoadRegiones){
         dataType : 'json',
         success : function($response) {
             if(typeof ($response !== 'undefined') && $response !== null){
-                console.log ($response);
                 if($response.status){                    
                     const $onceMapIsLoaded = onceMapIsLoaded;                    
                     $afterLoadRegiones($response.data, $onceMapIsLoaded);
@@ -159,15 +158,13 @@ function onceMapIsLoaded(){
         console.log("checked");
         const $isChecked = $(this).prop('checked');
         const $seccion = $(this).data('value');
-        const $parent = $(this).data('parent');   
+        const $parent = $(this).data('parent');
         
         const $afterLoadPuntos = function($seccion){
-            console.log($seccion);
             const $id = $seccion.id;
            
             if($seccion.geoJsonFile){
                 const $onEachFeature = function(feature, layer) {
-                    console.log(feature);
                     var popupContent = "<p>I started out as a GeoJSON " +
                             feature.geometry.type + ", but now I'm a Leaflet vector!</p>";
                     if (feature.properties) {
@@ -300,7 +297,6 @@ function loadSeccion($afterLoadPuntos, $seccion){
         type : 'GET',
         dataType : 'json',
         success : function($response) {
-            console.log($response);
             if(typeof ($response !== 'undefined') && $response !== null){
                 if($response.status){                    
                     $afterLoadPuntos($response.data);                    

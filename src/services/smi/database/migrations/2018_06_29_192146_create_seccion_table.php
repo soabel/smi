@@ -25,6 +25,8 @@ class CreateSeccionTable extends Migration
             $table->string('idSeccionPadre')->nullable();
             $table->string('geoJsonData')->nullable();
             $table->string('geoJsonFile')->nullable();
+            $table->string('logo')->nullable();
+            $table->string('marker')->nullable();
             $table->dateTime('fechaCrea');
             $table->string('usuarioCrea');
             $table->string('terminalCrea');

@@ -30,6 +30,7 @@ function validateAuthentication(){
 
 function settings() {
     $(".sidebar-dropdown > a").click(function () {
+        console.log($(this));
         $(".sidebar-submenu").slideUp(200);
         if ($(this).parent().hasClass("active")) {
             $(".sidebar-dropdown").removeClass("active");

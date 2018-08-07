@@ -88,14 +88,16 @@ function initMap($regiones, $afterMapIsLoaded) {
     
     const onEachFeature = function onEachFeature(feature, layer) {        
 		var popupContent = "<p>I started out as a GeoJSON " +
-				feature.geometry.type + ", but now I'm a Leaflet vector!</p>";
-		if (feature.properties && feature.properties.NOMBDIST) {            
+                feature.geometry.type + ", but now I'm a Leaflet vector!</p>";
+        
+		if (feature.properties && feature.properties.NOMBDEP) {            
             $template = renderHandlebarsTemplate(
                 "#region-popupcontent-template", null, { properties: feature.properties }, null, true
             );
 			popupContent = $template;
-		}
-		layer.bindPopup(popupContent);
+        }
+
+        layer.bindPopup(popupContent);
     }
     
     var myStyle = {
@@ -152,13 +154,13 @@ function loadRegiones($afterLoadRegiones){
     });
 }
 
-function agregarLeyenda($idElement,$seccion){
+function addLegend($idElement,$seccion){
     const $map_legend = $("#map-legend");
    
     $map_legend.append('&nbsp;<button type="button" class="btn btn-sm btn-light" onClick="removeMarker('+ $idElement + ',' + $seccion.id +');" seccion-id="SECCION-'+ $seccion.id + '"> ' + $seccion.nombre + ' <span class="badge badge-light"> X </span></button>')
 }
 
-function quitarLeyenda($seccionId){
+function removeLegend($seccionId){
     const $map_legend = $("#map-legend");
     var $seccionItem= $map_legend.find('[seccion-id="SECCION-'+  $seccionId  + '"]');
     $seccionItem.remove();
@@ -181,7 +183,7 @@ function removeMarker($id, $seccionId){
     }
 
     $('#'+$id).prop('checked', false);
-    quitarLeyenda($seccionId);
+    removeLegend($seccionId);
 }
 
 function onceMapIsLoaded(){    
@@ -201,7 +203,7 @@ function onceMapIsLoaded(){
             return;
         }
 
-        agregarLeyenda($id,$seccion);
+        addLegend($id,$seccion);
 
         const $addNewLayer = function($id, $layer){
             layers.push({

@@ -33,6 +33,7 @@ Route::group(['middleware' => 'cors'], function() {
     Route::get('/secciones/{id}/atributos/','SeccionesController@getSeccionAtributoByIdSeccion');   
     Route::post('/secciones','SeccionesController@save');
 
+    Route::get('/mapas/regiones','MapasController@getRegiones' );
     Route::get('/mapas/distritos','MapasController@getDistritos' );
  });
 

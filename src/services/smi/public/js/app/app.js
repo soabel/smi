@@ -1,9 +1,10 @@
 
-const API = "http://smi.alianzacacaoperu.org/api/";
-// const API = "http://localhost:8000/api/";
+//const API = "http://smi.alianzacacaoperu.org/api/";
+const API = "http://localhost:8000/api/";
 
 const API_SECCIONES = API + "secciones";
-const API_REGIONES = API + "mapas/distritos";
+const API_REGIONES = API + "mapas/regiones";
+const API_DISTRITOS = API + "mapas/distritos";
 
 const API_AUTHENTICATE = API + "authenticate";
 const API_VALIDAR_ACCESO = API + "validateLogin";

@@ -6,11 +6,12 @@ const MAP_MARKER_PIN = MARKER_PATH + "if_Pin_728961.png";
 const MAP_MARKER_LOCATION = MARKER_PATH + "if_location_925919.png";
 
 var map = {};
+var layers = [];
 
 jQuery(function ($) {
     if(!validateAuthentication()){
         clearCredentials();
-        window.location = URL_LOGIN;
+        window.location = URL_LOGIN;    
     }
     loadUserInformation();
     const $afterLoadSecciones = settings;
@@ -30,7 +31,6 @@ function validateAuthentication(){
 
 function settings() {
     $(".sidebar-dropdown > a").click(function () {
-        console.log($(this));
         $(".sidebar-submenu").slideUp(200);
         if ($(this).parent().hasClass("active")) {
             $(".sidebar-dropdown").removeClass("active");
@@ -152,17 +152,67 @@ function loadRegiones($afterLoadRegiones){
     });
 }
 
+function agregarLeyenda($idElement,$seccion){
+    const $map_legend = $("#map-legend");
+   
+    $map_legend.append('&nbsp;<button type="button" class="btn btn-sm btn-light" onClick="removeMarker('+ $idElement + ',' + $seccion.id +');" seccion-id="SECCION-'+ $seccion.id + '"> ' + $seccion.nombre + ' <span class="badge badge-light"> X </span></button>')
+}
+
+function quitarLeyenda($seccionId){
+    const $map_legend = $("#map-legend");
+    var $seccionItem= $map_legend.find('[seccion-id="SECCION-'+  $seccionId  + '"]');
+    $seccionItem.remove();
+
+}
+
+function removeMarker($id, $seccionId){
+    const $checkedLayer = layers.find(function ($item, $index) {
+        if($item.id === $id)
+            return $item;
+    });
+
+    if($checkedLayer){
+        map.removeLayer($checkedLayer.layer);
+        _.remove(layers, function($item){
+            return $item.id === $checkedLayer.id;
+        });
+        //let $index = layers.indexOf($checkedLayer);
+        //layers.splice($index);
+    }
+
+    $('#'+$id).prop('checked', false);
+    quitarLeyenda($seccionId);
+}
+
 function onceMapIsLoaded(){    
     const $menu_container = $("#menu-sidebar");
     var $items = $menu_container.find("input[type='checkbox'].menu-item");
     const $whenMenuItemIsChecked = function(){
-        console.log("checked");
         const $isChecked = $(this).prop('checked');
+        const $id = parseInt($(this).prop('id'));
         const $seccion = $(this).data('value');
         const $parent = $(this).data('parent');
+       
+        console.log($(this));
         
-        const $afterLoadPuntos = function($seccion){
-            const $id = $seccion.id;
+        
+        if(!$isChecked){
+            removeMarker($id, $seccion.id);            
+            return;
+        }
+
+        agregarLeyenda($id,$seccion);
+
+        const $addNewLayer = function($id, $layer){
+            layers.push({
+                id: $id,
+                layer: $layer
+            });
+        }
+
+
+        const $afterLoadPuntos = function($seccion, $cacheLayer){
+            const $id = $seccion.seccion.id;
            
             if($seccion.geoJsonFile){
                 const $onEachFeature = function(feature, layer) {
@@ -185,7 +235,7 @@ function onceMapIsLoaded(){
                 
                 let $points =JSON.parse( $seccion.geoJsonFile);
                 
-                L.geoJSON($points, {
+                const $currentSectionPoints = L.geoJSON($points, {
                     onEachFeature: $onEachFeature,
                     pointToLayer: function (feature, latlng) {
                         // return L.marker(latlng, {icon: divIcon});
@@ -200,7 +250,8 @@ function onceMapIsLoaded(){
                         // });
                     }
                 }).addTo(map);
-            }            
+                $cacheLayer($id, $currentSectionPoints);
+            }
         };
 
         const $afterLoadPoligonos = function($poligonos){
@@ -285,14 +336,14 @@ function onceMapIsLoaded(){
             }            
         };
 
-        loadSeccion($afterLoadPuntos, $seccion);
+        loadSeccion($afterLoadPuntos, $seccion, $addNewLayer);
         // loadPoligonos($afterLoadPoligonos);
         // loadLineas($afterLoadLines);
     };
-    $items.on("change", $whenMenuItemIsChecked);    
+    $items.on("change", $whenMenuItemIsChecked);
 }
 
-function loadSeccion($afterLoadPuntos, $seccion){
+function loadSeccion($afterLoadPuntos, $seccion, $cacheLayer){
     $.ajax({
         url : API_SECCIONES + '/' + $seccion.id,        
         type : 'GET',
@@ -300,7 +351,7 @@ function loadSeccion($afterLoadPuntos, $seccion){
         success : function($response) {
             if(typeof ($response !== 'undefined') && $response !== null){
                 if($response.status){                    
-                    $afterLoadPuntos($response.data);                    
+                    $afterLoadPuntos($response.data, $cacheLayer);
                 }
             }
         },     

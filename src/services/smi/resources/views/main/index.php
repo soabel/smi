@@ -118,7 +118,18 @@
 
     <nav class="navbar fixed-bottom navbar-expand-sm navbar-dark bg-brown custom-navbar">
         <div class="d-block w-100">
-            <p class="mb-0 text-center text-white font-weight-light font-italic">ALIANZA CACAO PERU &copy; 2018 - Todos los derechos reservados</p>
+
+            <div class="row">
+                <div class="col-3"></div>
+                <div class="col-9">
+                    <div class="row" id="map-legend">
+                        <!-- <button type="button" class="btn btn-sm btn-light">Agentes principales <span class="badge badge-light"> X </span></button> -->
+                    </div>                    
+                </div>
+            </div>
+            
+            <!-- <p class="mb-0 text-center text-white font-weight-light font-italic">ALIANZA CACAO PERU &copy; 2018 - Todos los derechos reservados</p> -->
+
         </div>
     </nav>
     <!-- Optional JavaScript -->
